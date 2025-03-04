@@ -1,0 +1,288 @@
+<!-- sections/page__contact.liquid -->
+{% comment %}
+  Form for contact page.
+
+  Globals:
+    - settings.layout_horizontal: horizontaly margin
+
+  Possible enhancements:
+    - Add setting so merchant can add more fields to contact form.
+
+  Pro tips:
+    - Update email address so form submissions are going to the right inbox.
+{% endcomment %}
+
+<section
+  class="{{ section.settings.color_scheme }}"
+  style="
+    padding-top:{{ section.settings.spacing_top }}px;
+    padding-bottom:{{ section.settings.spacing_bottom }}px;
+  "
+>
+  <div
+    class="
+      flex flex-wrap 2 justify-center
+      {{ settings.layout_horizontal }}
+      {{ settings.layout_alignment }}
+    "
+  >
+    <div class="max-w-prose w-full">
+      <h1>
+        {{ page.title | escape }}
+      </h1>
+
+      <div class="rte mb-4">
+        {{ page.content }}
+      </div>
+
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+          <p>
+            {{ 'contact.form.success' | t }}
+          </p>
+        {% endif %}
+
+        {% if form.errors %}
+          <div class="color__bg-overlay-1 type--small border--radius p-2 mt-2 mb-4">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        {% comment %}
+          THIS IS THE SECTION OF CODING THAT I ADDED
+        {% endcomment %}
+        <div class="mb-4">
+          <label>Contact Reason:</label><br>
+          <input type="checkbox" id="ContactReasonEmail" name="contact[Contact Reason]" value="QUOTE VIA EMAIL">
+          <label for="ContactReasonEmail">QUOTE VIA EMAIL</label><br>
+    
+          <input type="checkbox" id="ContactReasonPhone" name="contact[Contact Reason]" value="PAYABLE INVOICE VIA EMAIL">
+          <label for="ContactReasonPhone">PAYABLE INVOICE VIA EMAIL</label><br>
+    
+          <input type="checkbox" id="ContactReasonCall" name="contact[Contact Reason]" value="REQUEST A CALLBACK">
+          <label for="ContactReasonCall">REQUEST A CALLBACK</label><br>
+    
+          <input type="checkbox" id="ContactReasonSite" name="contact[Contact Reason]" value="ADD PRODUCT TO YOUR SITE">
+          <label for="ContactReasonSite">ADD PRODUCT TO YOUR SITE</label><br>
+        </div>
+        
+        <div class="mb-4">
+          <label for="FirstName">First Name:</label>
+          <input
+            type="text"
+            class="form-input"
+            name="contact[name]"
+            id="FirstName"
+            placeholder="{{ 'customer.addresses.first_name' | t }}"
+            value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+          >
+        </div>
+        <div class="mb-4">
+          <label for="LastName">Last Name:</label>
+          <input
+            type="text"
+            class="form-input"
+            name="contact[name]"
+            id="LastName"
+            placeholder="{{ 'customer.account.last_name' | t }}"
+            value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+          >
+        </div>
+
+        <div class="mb-4">
+          <label for="Address">Address:</label>
+          <input
+            type="text"
+            class="form-input"
+            name="contact[address]"
+            id="Address"
+            placeholder="Address"
+            value="{% if form.address1 %}{{ form.address1 }}{% elsif customer %}{{ customer.addresses[0].address }}{% endif %}"
+          >
+        </div>
+        <div class="mb-4">
+          <label for="ContactFormEmail">{{ 'contact.form.email' | t }}</label>
+          <input
+            type="email"
+            class="form-input"
+            name="contact[email]"
+            id="ContactFormEmail"
+            placeholder="{{ 'contact.form.email' | t }}"
+            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+          >
+        </div>
+        <div class="mb-4">
+          <label for="ContactFormPhone">Phone Number</label>
+          <input
+            type="text"
+            class="form-input"
+            name="contact[phone]"
+            id="ContactFormPhone"
+            placeholder="Phone Number"
+            value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+          >
+        </div>
+        <div class="mb-4">
+          <label for="ContactFormGolfCartYearModel">Golf Cart Year and Model</label>
+          <input
+            type="text"
+            class="form-input"
+            name="contact[Golf Cart Year and Model]"
+            id="ContactFormGolfCartYearModel"
+            placeholder="Golf Cart Year and Model"
+            value=""
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+          >
+        </div>
+        <div class="mb-4">
+          <label for="ContactFormGolfCartBrand">Golf Cart Brand</label>
+          <input
+            type="text"
+            class="form-input"
+            name="contact[Golf Cart Brand]"
+            id="ContactFormGolfCartBrand"
+            placeholder="Golf Cart Brand"
+            value=""
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+          >
+        </div>
+        <div class="mb-4">
+          <label for="ContactFormGolfCartStyle">Gas? or 36V, 48V, 72V Electric?</label>
+          <input
+            type="text"
+            class="form-input"
+            name="contact[Gas? or 36V, 48V, 72V Electric?]"
+            id="ContactFormGolfCartStyle"
+            placeholder="Add answer here"
+            value=""
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+          >
+        </div>
+        
+        <div class="mb-4">
+          <label for="ContactFormMessage">Tell us more?</label>
+          <textarea
+            rows="10"
+            class="border--radius"
+            name="contact[body]"
+            id="ContactFormMessage"
+            placeholder="{{ 'contact.form.message' | t }}"
+          >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn--secondary">
+          {{ 'contact.form.send' | t }}
+        </button>
+      {% endform %}
+    </div>
+
+    {% comment %}
+        THIS IS THE SECTION WITH THE DROP DOWN BOX.  REMOVING FOR NOW
+
+      <div class="form-group">
+       <label for="ContactFormInterest">What are you interested in?</label>
+       <select id="ContactFormInterest" name="contact[interest]">
+          <option>Product Inquiry</option>
+          <option>Support</option>
+          <option>Other</option>
+       </select>
+      </div>
+    {% endcomment %}
+    {% comment %}
+      THIS IS THE SECTION OF CODING THAT I ADDED.  THIS IS THE END OF IT
+    {% endcomment %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name":"t:sections.page_contact.name",
+  "settings":[
+    {
+      "type": "header",
+      "content": "t:sections.all.headers.header__22.content"
+    },
+    {
+      "type":"range",
+      "id":"spacing_top",
+      "min":0,
+      "max":300,
+      "step":20,
+      "unit":"px",
+      "label":"t:sections.all.layout.settings.spacing.label_top",
+      "default":60
+    },
+    {
+      "type":"range",
+      "id":"spacing_bottom",
+      "min":0,
+      "max":300,
+      "step":20,
+      "unit":"px",
+      "label":"t:sections.all.layout.settings.spacing.label_bottom",
+      "default":60
+    },
+    {
+      "type":"header",
+      "content":"t:sections.all.headers.header__1.content"
+    },
+    {
+      "type":"select",
+      "id":"color_scheme",
+      "label":"t:sections.all.colors.settings.color_scheme.label",
+      "options":[
+        {
+          "value":"color__bg-body color__text",
+          "label":"t:sections.all.colors.settings.color_scheme.options__1.label"
+        },
+        {
+          "value":"color__bg-neutral color__text",
+          "label":"t:sections.all.colors.settings.color_scheme.options__2.label"
+        },
+        {
+          "value":"color__bg-overlay-1 color__text",
+          "label":"t:sections.all.colors.settings.color_scheme.options__3.label"
+        },
+        {
+          "value":"color__bg-overlay-2 color__text",
+          "label":"t:sections.all.colors.settings.color_scheme.options__4.label"
+        },
+        {
+          "value":"color__bg-overlay-3 color__text",
+          "label":"t:sections.all.colors.settings.color_scheme.options__5.label"
+        },
+        {
+          "value":"color__bg-primary color__primary",
+          "label":"t:sections.all.colors.settings.color_scheme.options__6.label"
+        },
+        {
+          "value":"color__bg-secondary color__secondary",
+          "label":"t:sections.all.colors.settings.color_scheme.options__7.label"
+        },
+        {
+          "value":"color__bg-tertiary color__tertiary",
+          "label":"t:sections.all.colors.settings.color_scheme.options__8.label"
+        }
+      ],
+      "default":"color__bg-body color__text"
+    }
+  ],
+  "presets":[
+    {
+      "name":"t:sections.page_contact.name"
+    }
+  ]
+}
+{% endschema %}
